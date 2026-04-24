@@ -403,7 +403,19 @@ section{padding:130px 0;}
 .ti-period{
   font-size:.57rem;letter-spacing:2px;text-transform:uppercase;
   color:var(--gold);font-weight:600;line-height:1.5;
+  display:flex;flex-direction:column;gap:9px;
 }
+.ti-web{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.43rem;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(184,145,42,.55);text-decoration:none;
+  border:1px solid rgba(184,145,42,.2);
+  padding:4px 9px;
+  width:fit-content;
+  font-weight:600;
+  transition:color .3s,border-color .3s,background .3s;
+}
+.ti-web:hover{color:var(--ink);background:var(--gold);border-color:var(--gold);}
 .ti-dot-live{
   display:inline-block;width:5px;height:5px;border-radius:50%;
   background:var(--gold-b);margin-right:5px;vertical-align:middle;
@@ -566,8 +578,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
   .st-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.1);padding:32px 28px;}
   .st-item:last-child,.st-item:nth-child(2):last-child{border-bottom:none;}
   .ex-head{grid-template-columns:1fr;}
-  .ti-h{grid-template-columns:1fr auto;gap:16px;}
-  .ti-period{display:none;}
+  .ti-h{grid-template-columns:auto 1fr auto;gap:12px;align-items:center;}
+  .ti-period{display:flex;flex-direction:column;gap:0;}
+  .ti-period > span{display:none;}
+  .ti-web{font-size:.4rem;padding:3px 7px;letter-spacing:2px;}
   .ti-list{padding-left:0;}
   footer{flex-direction:column;gap:12px;text-align:center;padding:24px 28px;}
 }
@@ -680,7 +694,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period"><span class="ti-dot-live"></span>Juillet 2025 — Auj.</div>
+          <div class="ti-period">
+            <span><span class="ti-dot-live"></span>Juillet 2025 — Auj.</span>
+            <a href="https://all.accor.com/hotel/0736/index.fr.shtml" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Novotel Lyon Gerland ★★★★ & Ibis Lyon Gerland ★★★ <span class="badge">En poste</span></div>
             <div class="ti-place">315 chambres · 17 salles de réunion · Lyon</div>
@@ -694,7 +711,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Mai 2021 — Déc. 2024</div>
+          <div class="ti-period">
+            <span>Mai 2021 — Déc. 2024</span>
+            <a href="https://fr.mamashelter.com/marseille/" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Mama Shelter Marseille ★★★</div>
             <div class="ti-place">125 chambres · Restaurant-bar · 3 salles de réunion</div>
@@ -711,7 +731,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Oct. 2018 — Août 2020</div>
+          <div class="ti-period">
+            <span>Oct. 2018 — Août 2020</span>
+            <a href="https://www.roches-blanches-cassis.com/" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Les Roches Blanches Cassis ★★★★★</div>
             <div class="ti-place">36 chambres · 3 restaurants · 2 salles de réunion</div>
@@ -728,7 +751,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Juin 2018 — Sep. 2018</div>
+          <div class="ti-period">
+            <span>Juin 2018 — Sep. 2018</span>
+            <a href="https://www.sowell.fr/hotel/moulin-de-vernegues/" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Le Moulin de Vernègues ★★★★</div>
             <div class="ti-place">Les Collectionneurs · 100 chambres · 3 restaurants · 5 salles de réunion</div>
@@ -743,7 +769,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Sep. 2016 — Avr. 2018</div>
+          <div class="ti-period">
+            <span>Sep. 2016 — Avr. 2018</span>
+            <a href="https://www.marriott.com/en-us/hotels/mrsar-ac-hotel-marseille-prado-velodrome/overview/" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · AC by Marriott Marseille Prado Vélodrome ★★★★</div>
             <div class="ti-place">126 chambres · Restaurant · 1 salle de réunion</div>
@@ -759,7 +788,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Juin 2015 — Août 2016</div>
+          <div class="ti-period">
+            <span>Juin 2015 — Août 2016</span>
+            <a href="https://mgallery.accor.com/en/hotels/A064.html" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · MGallery Paris Bastille BOUTET ★★★★★</div>
             <div class="ti-place">80 chambres · Piscine & SPA</div>
@@ -776,7 +808,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti">
         <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">Avr. 2010 — Mai 2015</div>
+          <div class="ti-period">
+            <span>Avr. 2010 — Mai 2015</span>
+            <a href="https://all.accor.com/hotel/1131/index.en.shtml" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Mercure Paris Vaugirard Porte de Versailles ★★★★</div>
             <div class="ti-place">91 chambres · 11 salles de réunion (1 000 m²)</div>
@@ -791,7 +826,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti no-ex">
         <div class="ti-h">
-          <div class="ti-period">Avr. 2009 — Avr. 2010</div>
+          <div class="ti-period">
+            <span>Avr. 2009 — Avr. 2010</span>
+            <a href="https://all.accor.com/hotel/0372/index.en.shtml" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur délégué · Mercure Paris Opéra Cusset & Arc de Triomphe Étoile ★★★★</div>
           </div>
@@ -800,7 +838,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti no-ex">
         <div class="ti-h">
-          <div class="ti-period">Mai 2008 — Avr. 2009</div>
+          <div class="ti-period">
+            <span>Mai 2008 — Avr. 2009</span>
+            <a href="https://all.accor.com/hotel/0372/index.en.shtml" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Général · Mercure Paris Arc de Triomphe Étoile ★★★★</div>
             <div class="ti-place">54 chambres</div>
@@ -810,7 +851,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti no-ex">
         <div class="ti-h">
-          <div class="ti-period">Avr. 2006 — Avr. 2008</div>
+          <div class="ti-period">
+            <span>Avr. 2006 — Avr. 2008</span>
+            <a href="https://sofitel.accor.com/en/hotels/0553.html" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">Directeur Hébergement · Sofitel Lyon Bellecour ★★★★★</div>
             <div class="ti-place">164 chambres</div>
@@ -820,7 +864,10 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
       <div class="ti no-ex">
         <div class="ti-h">
-          <div class="ti-period">1994 — 2006</div>
+          <div class="ti-period">
+            <span>1994 — 2006</span>
+            <a href="https://all.accor.com/booking/en/mercure/hotels/la-defense-france" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+          </div>
           <div>
             <div class="ti-role">De Réceptionniste à Directeur Hébergement · Mercure Hôtels</div>
             <div class="ti-place">La Défense · Monty Opera · Gare de Lyon</div>
