@@ -876,12 +876,50 @@ footer{
   .ft-nav{align-items:center;}
   .ft-bottom{flex-direction:column;gap:8px;text-align:center;}
 }
+/* ── SHIMMER SWEEP ───────────────────────────────────── */
+#shimmer-sweep{
+  position:fixed;inset:0;z-index:9993;pointer-events:none;opacity:0;
+  background:linear-gradient(
+    108deg,
+    transparent 0%,transparent 28%,
+    rgba(201,168,76,.05) 36%,
+    rgba(242,223,154,.26) 45%,
+    rgba(255,250,225,.14) 50%,
+    rgba(201,168,76,.12) 55%,
+    transparent 63%,transparent 100%
+  );
+  background-size:250% 100%;background-position:200% 0;
+}
+#shimmer-sweep.run{animation:pgSweep 2.2s .4s cubic-bezier(.25,.46,.45,.94) forwards;}
+@keyframes pgSweep{
+  0%{opacity:1;background-position:200% 0;}
+  80%{opacity:1;}100%{opacity:0;background-position:-60% 0;}
+}
+
+/* ── CHAR SPLIT REVEALS ──────────────────────────────── */
+.char-w{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.05;}
+.char-i{display:inline-block;transform:translateY(110%);transition:transform .72s cubic-bezier(.77,0,.175,1);}
+.s-title.cvis .char-i{transform:translateY(0);}
+
+/* ── DIRECTIONAL REVEALS ─────────────────────────────── */
+[data-dir="l"]{opacity:0 !important;transform:translateX(-38px) !important;}
+[data-dir="r"]{opacity:0 !important;transform:translateX(38px) !important;}
+[data-dir="l"].visible,[data-dir="r"].visible{opacity:1 !important;transform:translate(0) !important;}
+
+/* ── MAGNETIC BUTTONS ────────────────────────────────── */
+.h-cta,.c-btn,.rec-arr,.ft-si{
+  transition:transform .45s cubic-bezier(.23,1,.32,1),
+             background .4s,color .4s,border-color .4s !important;
+}
 </style>
 </head>
 <body>
 
 <!-- GRAIN -->
 <div class="grain"></div>
+
+<!-- SHIMMER SWEEP -->
+<div id="shimmer-sweep"></div>
 
 <!-- LOADER -->
 <div id="loader">
@@ -1497,11 +1535,6 @@ footer{
 </footer>
 
 <script>
-/* ── LOADER ─────────────────────────────────────────── */
-window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('loader').classList.add('out'), 2300);
-});
-
 /* ── SMOOTH SCROLL ENGINE ───────────────────────────── */
 let _ssTarget = window.scrollY, _ssCurrent = _ssTarget, _ssTicking = false;
 function _ssLerp(a,b,t){return a+(b-a)*t;}
@@ -1741,6 +1774,74 @@ document.querySelectorAll('.soft-card').forEach(card => {
     card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
   });
 });
+/* ══════════════════════════════════════════════════════
+   D — CHAR-BY-CHAR TITLE REVEALS
+══════════════════════════════════════════════════════ */
+(function(){
+  document.querySelectorAll('.s-title').forEach(el => {
+    if(el.querySelector('*')) return; // skip if has child elements
+    const text = el.textContent;
+    el.innerHTML = text.split('').map((c,i) =>
+      c===' ' ? ' ' :
+      `<span class="char-w"><span class="char-i" style="transition-delay:${(i*0.032).toFixed(3)}s">${c==='&'?'&amp;':c}</span></span>`
+    ).join('');
+    const titleObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting){ el.classList.add('cvis'); titleObs.unobserve(el); }
+      });
+    }, {threshold:.5});
+    titleObs.observe(el);
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   G — GOLD SHIMMER PAGE SWEEP
+══════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('out');
+    const sweep = document.getElementById('shimmer-sweep');
+    if(sweep) setTimeout(() => sweep.classList.add('run'), 900);
+  }, 2300);
+});
+
+/* ══════════════════════════════════════════════════════
+   H — MAGNETIC BUTTONS
+══════════════════════════════════════════════════════ */
+document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r   = btn.getBoundingClientRect();
+    const dx  = (e.clientX - (r.left + r.width  * .5)) * .28;
+    const dy  = (e.clientY - (r.top  + r.height * .5)) * .28;
+    btn.style.transform = `translate(${dx}px,${dy}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+/* ══════════════════════════════════════════════════════
+   A — DIRECTIONAL SECTION REVEALS
+══════════════════════════════════════════════════════ */
+(function(){
+  // Left-entering elements
+  [
+    '#profil .p-photo-wrap',
+    '#experiences .ti',
+    '#competences .c-layout > div:first-child .sk-row',
+    '#formation .f-item',
+    '#recommandations .rec-card:nth-child(odd)',
+  ].forEach(sel => document.querySelectorAll(sel).forEach(el => {
+    if(!el.hasAttribute('data-dir')) el.dataset.dir = 'l';
+  }));
+  // Right-entering elements
+  [
+    '#profil .p-body',
+    '#presse .pr-card',
+    '#competences .c-layout > div:last-child .soft-card',
+    '#recommandations .rec-card:nth-child(even)',
+  ].forEach(sel => document.querySelectorAll(sel).forEach(el => {
+    if(!el.hasAttribute('data-dir')) el.dataset.dir = 'r';
+  }));
+})();
 </script>
 </body>
 </html>
