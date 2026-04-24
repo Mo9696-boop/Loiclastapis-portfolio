@@ -95,15 +95,23 @@ nav .nav-links a:hover::after{width:100%;}
   background:var(--ink);
   display:flex;align-items:flex-end;padding-bottom:90px;
 }
-#pc{position:absolute;inset:0;z-index:0;}
+.h-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  transform:scale(1.1);
+  transform-origin:center center;
+  will-change:transform;
+  filter:brightness(.72) saturate(.85);
+}
+#pc{position:absolute;inset:0;z-index:2;}
 .h-vignette{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
+  position:absolute;inset:0;z-index:3;pointer-events:none;
   background:
-    radial-gradient(ellipse at 20% 50%,rgba(201,168,76,.08) 0%,transparent 55%),
-    linear-gradient(to top,rgba(24,20,14,.6) 0%,transparent 50%);
+    radial-gradient(ellipse at 18% 55%,rgba(201,168,76,.06) 0%,transparent 52%),
+    linear-gradient(180deg,rgba(24,20,14,.48) 0%,rgba(24,20,14,.18) 38%,rgba(24,20,14,.78) 100%);
 }
 .h-wrap{
-  position:relative;z-index:2;width:100%;padding:0 80px;
+  position:relative;z-index:4;width:100%;padding:0 80px;
   display:grid;grid-template-columns:1fr 220px;gap:60px;align-items:flex-end;
 }
 .h-left{}
@@ -183,10 +191,10 @@ h1.h-name em{
 .h-stat-num .g{color:var(--gold-b);font-style:italic;}
 .h-stat-lbl{
   font-size:.48rem;letter-spacing:3.5px;text-transform:uppercase;
-  color:rgba(245,243,239,.28);margin-top:14px;font-weight:500;
+  color:rgba(245,243,239,.72);margin-top:14px;font-weight:700;
 }
 .h-scroll{
-  position:absolute;bottom:38px;right:80px;z-index:3;
+  position:absolute;bottom:38px;right:80px;z-index:5;
   display:flex;flex-direction:column;align-items:center;gap:10px;
   opacity:0;animation:hFade 1s 1.9s forwards;
 }
@@ -591,6 +599,7 @@ footer p{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:rgba(
 
 <!-- HERO -->
 <section id="hero">
+  <div class="h-bg" id="heroBg"></div>
   <canvas id="pc"></canvas>
   <div class="h-vignette"></div>
   <div class="h-wrap">
@@ -939,15 +948,50 @@ window.addEventListener('load', () => {
   setTimeout(() => document.getElementById('loader').classList.add('out'), 2300);
 });
 
+/* ── SMOOTH SCROLL ENGINE ───────────────────────────── */
+let _ssTarget = window.scrollY, _ssCurrent = _ssTarget, _ssTicking = false;
+function _ssLerp(a,b,t){return a+(b-a)*t;}
+function _ssTick(){
+  _ssCurrent = _ssLerp(_ssCurrent, _ssTarget, 0.092);
+  window.scrollTo(0, _ssCurrent);
+  if(Math.abs(_ssCurrent - _ssTarget) > 0.35) requestAnimationFrame(_ssTick);
+  else { window.scrollTo(0, _ssTarget); _ssTicking = false; }
+}
+function smoothScrollTo(y){
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  _ssTarget = Math.max(0, Math.min(y, max));
+  if(!_ssTicking){ _ssTicking = true; requestAnimationFrame(_ssTick); }
+}
+window.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaMode === 1 ? e.deltaY * 28 : e.deltaY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  _ssTarget = Math.max(0, Math.min(_ssTarget + delta, max));
+  if(!_ssTicking){ _ssTicking = true; requestAnimationFrame(_ssTick); }
+}, {passive:false});
+window.addEventListener('keydown', e => {
+  if(document.activeElement?.tagName.match(/INPUT|TEXTAREA/)) return;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  if(e.key==='ArrowDown'){ e.preventDefault(); _ssTarget=Math.min(_ssTarget+88,max); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); _ssTarget=Math.max(_ssTarget-88,0); }
+  else if(e.key==='PageDown'){ e.preventDefault(); _ssTarget=Math.min(_ssTarget+innerHeight*.88,max); }
+  else if(e.key==='PageUp'){ e.preventDefault(); _ssTarget=Math.max(_ssTarget-innerHeight*.88,0); }
+  else return;
+  if(!_ssTicking){ _ssTicking = true; requestAnimationFrame(_ssTick); }
+});
+
 /* ── NAV ────────────────────────────────────────────── */
 const nav = document.getElementById('navbar');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
-document.getElementById('heroCta').addEventListener('click', () =>
-  document.getElementById('profil').scrollIntoView({behavior:'smooth'}));
+document.getElementById('heroCta').addEventListener('click', () => {
+  const el = document.getElementById('profil');
+  if(el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY);
+});
 document.querySelectorAll('.nav-links a').forEach(a =>
   a.addEventListener('click', e => {
     e.preventDefault();
-    document.getElementById(a.getAttribute('href').slice(1))?.scrollIntoView({behavior:'smooth'});
+    const el = document.getElementById(a.getAttribute('href').slice(1));
+    if(el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY);
   }));
 
 /* ── PARTICLES ──────────────────────────────────────── */
@@ -977,9 +1021,19 @@ for(let i=0;i<70;i++) pts.push(mkPt());
 
 /* ── HERO PARALLAX ──────────────────────────────────── */
 const hWrap = document.querySelector('.h-wrap');
+const heroBg = document.getElementById('heroBg');
 document.addEventListener('mousemove', e => {
   const x=(e.clientX/innerWidth-.5)*9,y=(e.clientY/innerHeight-.5)*4.5;
   hWrap.style.transform=`translate(${x}px,${y}px)`;
+  if(heroBg){
+    const bx=(e.clientX/innerWidth-.5)*-16, by=(e.clientY/innerHeight-.5)*-8;
+    heroBg.style.transform=`scale(1.1) translate(${bx}px,${by}px)`;
+  }
+});
+window.addEventListener('scroll', () => {
+  if(heroBg && scrollY < innerHeight * 1.2){
+    heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.28}px)`;
+  }
 });
 
 /* ── REVEAL ─────────────────────────────────────────── */
