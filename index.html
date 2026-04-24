@@ -324,7 +324,7 @@ section{padding:130px 0;}
   letter-spacing:-8px;
 }
 /* make sections position:relative so ghost stays inside */
-#profil,#stats,#experiences,#competences,#formation{position:relative;overflow:hidden;}
+#profil,#stats,#experiences,#presse,#competences,#formation{position:relative;overflow:hidden;}
 
 /* ── PULL-QUOTE ──────────────────────────────────────── */
 #pullquote{
@@ -447,6 +447,77 @@ section{padding:130px 0;}
   font-size:.45rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;
   margin-left:10px;vertical-align:middle;
 }
+
+/* ── PRESSE & MÉDIAS ─────────────────────────────────── */
+#presse{background:var(--ink);position:relative;overflow:hidden;}
+#presse::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 60% 0%,rgba(201,168,76,.07) 0%,transparent 55%);
+  pointer-events:none;
+}
+.pr-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(201,168,76,.1);
+  margin-top:70px;
+}
+.pr-card{
+  background:var(--ink);
+  padding:44px 38px;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .7s,transform .7s;
+}
+.pr-card.visible{opacity:1;transform:translateY(0);}
+.pr-card:nth-child(2){transition-delay:.12s;}
+.pr-card:nth-child(3){transition-delay:.24s;}
+.pr-card::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(201,168,76,.04);
+  opacity:0;transition:opacity .35s;pointer-events:none;
+}
+.pr-card:hover::before{opacity:1;}
+.pr-source{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:28px;
+}
+.pr-source-ico{
+  width:36px;height:36px;border:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.pr-source-ico svg{width:16px;height:16px;fill:rgba(201,168,76,.55);}
+.pr-source-name{
+  font-size:.48rem;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(201,168,76,.45);font-weight:600;
+}
+.pr-type{
+  font-size:.42rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(201,168,76,.25);margin-top:2px;
+}
+.pr-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.05rem,1.6vw,1.3rem);
+  font-weight:400;font-style:italic;
+  color:rgba(245,243,239,.78);
+  line-height:1.55;
+  flex:1;margin-bottom:32px;
+}
+.pr-title strong{color:var(--gold-b);font-style:normal;}
+.pr-meta{
+  font-size:.5rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(245,243,239,.2);margin-bottom:22px;
+}
+.pr-link{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.48rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;font-weight:600;
+  border-bottom:1px solid rgba(201,168,76,.25);
+  padding-bottom:3px;width:fit-content;
+  transition:color .3s,border-color .3s,gap .3s;
+  margin-top:auto;
+}
+.pr-link:hover{color:var(--gold-l);border-color:var(--gold-l);gap:14px;}
+.pr-link .arr{font-size:.6rem;}
 
 /* ── COMPÉTENCES ────────────────────────────────────── */
 #competences{background:var(--bg-alt);}
@@ -696,6 +767,7 @@ footer{
   .ctr{padding:0 28px;}
   section{padding:80px 0;}
   .p-grid,.c-layout,.f-layout{grid-template-columns:1fr;gap:52px;}
+  .pr-grid{grid-template-columns:1fr;}
   .p-frame{width:100%;max-width:280px;height:300px;}
   .st-grid{grid-template-columns:1fr 1fr;}
   .st-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.1);padding:32px 28px;}
@@ -734,6 +806,7 @@ footer{
   <ul class="nav-links">
     <li><a href="#profil">Profil</a></li>
     <li><a href="#experiences">Expériences</a></li>
+    <li><a href="#presse">Presse</a></li>
     <li><a href="#competences">Compétences</a></li>
     <li><a href="#formation">Formation</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -749,6 +822,7 @@ footer{
   <ul class="mm-links">
     <li><a href="#profil" class="mm-link">Profil</a></li>
     <li><a href="#experiences" class="mm-link">Expériences</a></li>
+    <li><a href="#presse" class="mm-link">Presse</a></li>
     <li><a href="#competences" class="mm-link">Compétences</a></li>
     <li><a href="#formation" class="mm-link">Formation</a></li>
     <li><a href="#contact" class="mm-link">Contact</a></li>
@@ -1025,9 +1099,72 @@ footer{
   </div>
 </section>
 
+<!-- PRESSE & MÉDIAS -->
+<section id="presse">
+  <div class="s-ghost">04</div>
+  <div class="ctr">
+    <div class="reveal">
+      <span class="s-lbl">Rayonnement & visibilité</span>
+      <div class="s-rule"></div>
+      <h2 class="s-title on-dark">Presse & Médias</h2>
+    </div>
+    <div class="pr-grid">
+
+      <!-- LinkedIn video -->
+      <div class="pr-card reveal">
+        <div class="pr-source">
+          <div class="pr-source-ico">
+            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </div>
+          <div>
+            <div class="pr-source-name">LinkedIn</div>
+            <div class="pr-type">Vidéo · Publication</div>
+          </div>
+        </div>
+        <p class="pr-title">« Une belle mise en avant du <strong>savoir-faire</strong> de mes équipes pour faire vivre un moment unique à nos clients »</p>
+        <div class="pr-meta">Mama Shelter Marseille</div>
+        <a href="https://www.linkedin.com/posts/loic-lastapis_une-belle-mise-en-avant-du-savoir-faire-de-ugcPost-6691405087039926273-Lqu9" target="_blank" class="pr-link">Voir la vidéo <span class="arr">→</span></a>
+      </div>
+
+      <!-- La Provence -->
+      <div class="pr-card reveal">
+        <div class="pr-source">
+          <div class="pr-source-ico">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+          </div>
+          <div>
+            <div class="pr-source-name">La Provence</div>
+            <div class="pr-type">Presse régionale · Article</div>
+          </div>
+        </div>
+        <p class="pr-title">À l'hôtel des <strong>Roches Blanches</strong>, on recrute pour la saison</p>
+        <div class="pr-meta">Les Roches Blanches · Cassis</div>
+        <a href="https://www.laprovence.com/article/edition-aubagne-la-ciotat/5346997/a-lhotel-des-roches-blanches-on-recrute-pour-la-saison.html" target="_blank" class="pr-link">Lire l'article <span class="arr">→</span></a>
+      </div>
+
+      <!-- Businews -->
+      <div class="pr-card reveal">
+        <div class="pr-source">
+          <div class="pr-source-ico">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          </div>
+          <div>
+            <div class="pr-source-name">Businews</div>
+            <div class="pr-type">Presse économique · Article</div>
+          </div>
+        </div>
+        <p class="pr-title">TechnicoFlor et <strong>Mama Shelter</strong> proposent une parenthèse olfactive et gastronomique</p>
+        <div class="pr-meta">Mama Shelter Marseille</div>
+        <a href="https://www.businews.fr/TechnicoFlor-et-Mama-Shelter-proposent-une-parenthese-olfactive-et-gastronomique_a4314.html" target="_blank" class="pr-link">Lire l'article <span class="arr">→</span></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- COMPÉTENCES -->
 <section id="competences">
-  <div class="s-ghost">04</div>
+  <div class="s-ghost">05</div>
   <div class="ctr">
     <div class="reveal" style="margin-bottom:70px">
       <span class="s-lbl">Savoir-faire</span>
@@ -1058,7 +1195,7 @@ footer{
 
 <!-- FORMATION -->
 <section id="formation">
-  <div class="s-ghost">05</div>
+  <div class="s-ghost">06</div>
   <div class="ctr">
     <div class="f-layout">
       <div>
@@ -1150,6 +1287,7 @@ footer{
       <ul class="ft-nav">
         <li><a href="#profil">Profil</a></li>
         <li><a href="#experiences">Expériences</a></li>
+        <li><a href="#presse">Presse</a></li>
         <li><a href="#competences">Compétences</a></li>
         <li><a href="#formation">Formation</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1281,7 +1419,7 @@ window.addEventListener('scroll', () => {
 const obs = new IntersectionObserver(es =>
   es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }),
   {threshold:.07, rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal,.ti,.f-item,.st-item,.pq-number,.pq-right').forEach(el=>obs.observe(el));
+document.querySelectorAll('.reveal,.ti,.f-item,.st-item,.pq-number,.pq-right,.pr-card').forEach(el=>obs.observe(el));
 
 /* ── COUNTERS ───────────────────────────────────────── */
 const cObs = new IntersectionObserver(es => es.forEach(e => {
