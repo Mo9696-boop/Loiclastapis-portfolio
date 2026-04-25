@@ -964,6 +964,98 @@ footer{
 /* Remove old corner */
 .p-corner { display: none; }
 
+
+/* ── FEATURED CURRENT EXPERIENCE ────────────────────── */
+.feat-exp {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  margin-bottom: 60px;
+  cursor: pointer;
+}
+.feat-exp-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  transform: scale(1.04);
+  transition: transform 1.2s ease;
+  filter: brightness(.55) saturate(.8);
+}
+.feat-exp:hover .feat-exp-bg { transform: scale(1.08); }
+.feat-exp-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(24,20,14,.82) 0%,
+    rgba(24,20,14,.45) 50%,
+    rgba(24,20,14,.25) 100%
+  );
+}
+.feat-exp-body {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 48px 52px;
+  z-index: 2;
+}
+.feat-exp-period {
+  font-size: .54rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold-b); font-weight: 600;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
+}
+.feat-exp-period .dot-live {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold-b); animation: dPulse 2s ease infinite; flex-shrink: 0;
+}
+.feat-exp-badge {
+  background: var(--gold-b); color: var(--ink);
+  font-size: .42rem; letter-spacing: 2.5px; text-transform: uppercase;
+  font-weight: 700; padding: 3px 10px;
+}
+.feat-exp-role {
+  font-size: .58rem; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(245,243,239,.7); font-weight: 500; margin-bottom: 12px;
+}
+.feat-exp-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 400; color: #fff; line-height: 1.05;
+  letter-spacing: -0.5px; margin-bottom: 18px;
+}
+.feat-exp-details {
+  font-size: .55rem; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(245,243,239,.55); margin-bottom: 20px; font-weight: 500;
+}
+.feat-exp-bullet {
+  font-size: .82rem; color: rgba(245,243,239,.75);
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px;
+  line-height: 1.65; max-width: 560px;
+}
+.feat-exp-bullet::before {
+  content: '◆'; color: var(--gold-b); font-size: .38rem; flex-shrink: 0; margin-top: 5px;
+}
+.feat-exp-link {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: .52rem; letter-spacing: 3.5px; text-transform: uppercase;
+  color: var(--gold-b); text-decoration: none; font-weight: 600;
+  border: 1px solid rgba(201,168,76,.4); padding: 10px 26px;
+  transition: all .35s; width: fit-content;
+}
+.feat-exp-link:hover { background: var(--gold-b); color: var(--ink); border-color: var(--gold-b); }
+.feat-exp-corner-tl, .feat-exp-corner-br {
+  position: absolute; width: 28px; height: 28px; z-index: 3; pointer-events: none;
+}
+.feat-exp-corner-tl { top: 18px; left: 18px;
+  border-top: 1px solid rgba(201,168,76,.5); border-left: 1px solid rgba(201,168,76,.5); }
+.feat-exp-corner-br { bottom: 18px; right: 18px;
+  border-bottom: 1px solid rgba(201,168,76,.5); border-right: 1px solid rgba(201,168,76,.5); }
+
+@media(max-width:900px){
+  .feat-exp { height: 420px; }
+  .feat-exp-body { padding: 32px 28px; }
+  .feat-exp-name { font-size: 2rem; }
+}
+
 </style>
 </head>
 <body>
@@ -1102,21 +1194,24 @@ footer{
     </div>
     <div class="tl">
 
-      <div class="ti">
-        <div class="ti-h" onclick="toggleTi(this)">
-          <div class="ti-period">
-            <span><span class="ti-dot-live"></span>Juillet 2025 — Auj.</span>
-            <a href="https://all.accor.com/hotel/0736/index.fr.shtml" class="ti-web" target="_blank" onclick="event.stopPropagation()">↗ Site web</a>
+      <!-- FEATURED: Poste actuel -->
+      <div class="feat-exp reveal">
+        <div class="feat-exp-bg"></div>
+        <div class="feat-exp-overlay"></div>
+        <div class="feat-exp-corner-tl"></div>
+        <div class="feat-exp-corner-br"></div>
+        <div class="feat-exp-body">
+          <div class="feat-exp-period">
+            <span class="dot-live"></span>
+            Juillet 2025 — Aujourd'hui
+            <span class="feat-exp-badge">En poste</span>
           </div>
-          <div>
-            <div class="ti-role">Directeur Général · Novotel Lyon Gerland ★★★★ & Ibis Lyon Gerland ★★★ <span class="badge">En poste</span></div>
-            <div class="ti-place">315 chambres · 17 salles de réunion · Lyon</div>
-          </div>
-          <div class="ti-tog">+</div>
+          <div class="feat-exp-role">Directeur Général</div>
+          <div class="feat-exp-name">Novotel &amp; Ibis<br>Lyon Gerland</div>
+          <div class="feat-exp-details">315 chambres · 17 salles de réunion · Lyon</div>
+          <div class="feat-exp-bullet">Suivi du programme de rénovation complète de l'établissement</div>
+          <a href="https://all.accor.com/hotel/0736/index.fr.shtml" target="_blank" class="feat-exp-link">↗ Voir l'hôtel</a>
         </div>
-        <div class="ti-body"><ul class="ti-list">
-          <li>Suivi du programme de rénovation complète de l'établissement</li>
-        </ul></div>
       </div>
 
       <div class="ti">
