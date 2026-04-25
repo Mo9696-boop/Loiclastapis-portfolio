@@ -97,22 +97,22 @@ nav .nav-links a:hover::after{width:100%;}
 }
 .h-bg{
   position:absolute;inset:0;z-index:0;
-  background:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-  transform:scale(1.1);
+  background:url('https://images.unsplash.com/photo-1445546857131-5fc39d1c51f0?auto=format&fit=crop&w=1920&q=80') center center/cover no-repeat;
+  transform:scale(1.0);
   transform-origin:center center;
   will-change:transform;
-  filter:brightness(.72) saturate(.85);
+  filter:brightness(.95) saturate(1.05);
 }
 #pc{position:absolute;inset:0;z-index:2;}
 .h-vignette{
   position:absolute;inset:0;z-index:3;pointer-events:none;
   background:
-    radial-gradient(ellipse at 18% 55%,rgba(201,168,76,.06) 0%,transparent 52%),
-    linear-gradient(180deg,rgba(24,20,14,.48) 0%,rgba(24,20,14,.18) 38%,rgba(24,20,14,.78) 100%);
+    linear-gradient(to right, rgba(24,20,14,.78) 0%, rgba(24,20,14,.42) 38%, rgba(24,20,14,.04) 70%),
+    linear-gradient(to top, rgba(24,20,14,.85) 0%, rgba(24,20,14,.3) 30%, rgba(24,20,14,.0) 52%);
 }
 .h-wrap{
   position:relative;z-index:4;width:100%;padding:0 80px;
-  display:grid;grid-template-columns:1fr 220px;gap:60px;align-items:flex-end;
+  display:grid;grid-template-columns:1fr 200px;gap:60px;align-items:flex-end;
 }
 .h-left{}
 .h-eye{
@@ -839,6 +839,10 @@ footer{
 @keyframes sPulse{0%,100%{opacity:.25}50%{opacity:1}}
 @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes dPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes kenBurns{
+  0%{transform:scale(1.0) translate(0px, 0px);}
+  100%{transform:scale(1.1) translate(-12px, -6px);}
+}
 
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;}
 .reveal.visible{opacity:1;transform:translateY(0);}
@@ -1056,6 +1060,8 @@ footer{
   .feat-exp-name { font-size: 2rem; }
 }
 
+
+
 </style>
 </head>
 <body>
@@ -1109,7 +1115,6 @@ footer{
 <!-- HERO -->
 <section id="hero">
   <div class="h-bg" id="heroBg"></div>
-  <canvas id="pc"></canvas>
   <div class="h-vignette"></div>
   <div class="h-wrap">
     <div class="h-left">
@@ -1135,7 +1140,6 @@ footer{
     <div class="h-scroll-lbl">Défiler</div>
   </div>
 </section>
-
 <!-- MARQUEE -->
 <div class="mq-band">
   <div class="mq-track">
@@ -1736,46 +1740,16 @@ document.querySelectorAll('.nav-links a').forEach(a =>
     if(el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY);
   }));
 
-/* ── PARTICLES ──────────────────────────────────────── */
-const canvas = document.getElementById('pc');
-const ctx = canvas.getContext('2d');
-function rsz(){ canvas.width=innerWidth; canvas.height=innerHeight; }
-rsz(); window.addEventListener('resize', rsz);
-const pts = [];
-function mkPt(){
-  return {x:Math.random()*canvas.width,y:Math.random()*canvas.height,
-    r:Math.random()*.9+.25,a:Math.random()*.45+.1,
-    vx:(Math.random()-.5)*.18,vy:-Math.random()*.28-.08,
-    life:0,max:Math.random()*320+160};
-}
-for(let i=0;i<70;i++) pts.push(mkPt());
-(function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  pts.forEach((p,i)=>{
-    p.life++; p.x+=p.vx; p.y+=p.vy;
-    const f=p.life<40?p.life/40:p.life>p.max-40?(p.max-p.life)/40:1;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(201,168,76,${p.a*f})`; ctx.fill();
-    if(p.life>=p.max) pts[i]=mkPt();
-  });
-  requestAnimationFrame(draw);
-})();
-
-/* ── HERO PARALLAX ──────────────────────────────────── */
+/* ── HERO: SUBTLE MOUSE PARALLAX ────────────────────── */
 const hWrap = document.querySelector('.h-wrap');
 const heroBg = document.getElementById('heroBg');
+
 document.addEventListener('mousemove', e => {
-  const x=(e.clientX/innerWidth-.5)*9,y=(e.clientY/innerHeight-.5)*4.5;
-  hWrap.style.transform=`translate(${x}px,${y}px)`;
-  if(heroBg){
-    const bx=(e.clientX/innerWidth-.5)*-16, by=(e.clientY/innerHeight-.5)*-8;
-    heroBg.style.transform=`scale(1.1) translate(${bx}px,${by}px)`;
-  }
-});
-window.addEventListener('scroll', () => {
-  if(heroBg && scrollY < innerHeight * 1.2){
-    heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.28}px)`;
-  }
+  if(scrollY > innerHeight * 0.5) return;
+  const x = (e.clientX / innerWidth  - .5) * -10;
+  const y = (e.clientY / innerHeight - .5) * -5;
+  if(heroBg) heroBg.style.transform = `translate(${x}px, ${y}px)`;
+  if(hWrap)  hWrap.style.transform  = `translate(${x * 0.18}px, ${y * 0.18}px)`;
 });
 
 /* ── REVEAL ─────────────────────────────────────────── */
@@ -1952,12 +1926,17 @@ document.querySelectorAll('.soft-card').forEach(card => {
 /* ══════════════════════════════════════════════════════
    G — GOLD SHIMMER PAGE SWEEP
 ══════════════════════════════════════════════════════ */
+function hideLoader(){
+  const loader = document.getElementById('loader');
+  if(loader) loader.classList.add('out');
+  const sweep = document.getElementById('shimmer-sweep');
+  if(sweep) setTimeout(() => sweep.classList.add('run'), 900);
+}
+// Hide loader after max 2s regardless — don't wait for slow/blocked images
+const _loaderFallback = setTimeout(hideLoader, 3500);
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('out');
-    const sweep = document.getElementById('shimmer-sweep');
-    if(sweep) setTimeout(() => sweep.classList.add('run'), 900);
-  }, 2300);
+  clearTimeout(_loaderFallback);
+  setTimeout(hideLoader, 3000);
 });
 
 /* ══════════════════════════════════════════════════════
@@ -1997,6 +1976,8 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
     if(!el.hasAttribute('data-dir')) el.dataset.dir = 'r';
   }));
 })();
+
+
 </script>
 </body>
 </html>
