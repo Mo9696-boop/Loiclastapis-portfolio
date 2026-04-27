@@ -847,7 +847,7 @@ footer{
 .ft-bottom{
   display:flex;justify-content:space-between;align-items:center;
 }
-.ft-copy{font-size:.46rem;letter-spacing:2px;text-transform:uppercase;color:rgba(245,243,239,.45);}
+.ft-copy{font-size:.46rem;letter-spacing:2px;text-transform:uppercase;color:rgba(245,243,239,.9);}
 .ft-made{font-size:.46rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,243,239,.35);font-style:italic;}
 
 /* ── ANIMATIONS ─────────────────────────────────────── */
@@ -1550,6 +1550,79 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
   .cq-text{font-size:1.45rem;}
 }
 
+/* ── PHONE OPTIMISATION (≤480px) ────────────────────── */
+@media(max-width:480px){
+
+  /* Nav */
+  nav,nav.scrolled{padding:14px 20px;}
+
+  /* Hero */
+  #hero{padding-bottom:60px;min-height:100svh;}
+  .h-wrap{padding:0 20px;padding-bottom:0;}
+  h1.h-name{font-size:clamp(3.6rem,18vw,5.5rem);letter-spacing:-1px;line-height:.92;}
+  .h-tagline{font-size:.95rem;letter-spacing:1px;}
+  .h-rule{margin:20px 0;}
+  .h-cta{margin-top:28px;padding:12px 28px;font-size:.5rem;letter-spacing:3px;}
+  .h-eye{font-size:.44rem;letter-spacing:4px;margin-bottom:14px;}
+
+  /* General sections */
+  section{padding:60px 0;}
+  .ctr{padding:0 20px;}
+  .s-title{font-size:clamp(2.2rem,11vw,3.5rem);}
+
+  /* Profile */
+  .p-frame{max-width:240px;height:260px;}
+  .p-bio{font-size:.88rem;line-height:1.75;}
+  .tags{gap:8px;}
+  .tag{font-size:.4rem;padding:5px 12px;letter-spacing:2px;}
+
+  /* Stats bar */
+  .st-grid{grid-template-columns:1fr;}
+  .st-item{padding:24px 20px;}
+  .st-num{font-size:3rem;}
+
+  /* Featured experience */
+  .feat-exp{height:360px;}
+  .feat-exp-body{padding:24px 20px;}
+  .feat-exp-name{font-size:1.6rem;}
+  .feat-exp-bullet{font-size:.78rem;}
+  .feat-exp-link{font-size:.44rem;padding:8px 18px;letter-spacing:2.5px;}
+
+  /* Experience cards */
+  .exp-card{flex:0 0 92vw;height:420px;}
+  .exp-card.feat{flex:0 0 92vw;height:440px;}
+  .exp-strip-outer{margin:24px -20px 0;padding:0 20px;}
+  .exp-controls{padding:0 20px;}
+
+  /* Cinematic quote */
+  #cin-quote{min-height:60vh;padding-left:0;justify-content:center;}
+  .cq-inner{padding:0 20px;text-align:center;}
+  .cq-text{font-size:1.2rem;line-height:1.7;}
+  .cq-open-mark{font-size:5rem;left:20px;}
+  .cq-rule{margin:20px auto;}
+  .cq-eyebrow{font-size:.4rem;letter-spacing:4px;}
+
+  /* Press */
+  .pr-grid{gap:16px;}
+
+  /* Testimonials */
+  .rec-card{padding:28px 20px;}
+  .rec-quote{font-size:.92rem;}
+
+  /* Skills */
+  .soft-cards{grid-template-columns:1fr;}
+
+  /* Formation */
+  .f-layout{gap:36px;}
+
+  /* Footer */
+  footer{padding:20px;}
+  .ft-copy,.ft-made{font-size:.38rem;letter-spacing:1.5px;}
+
+  /* Menu mobile */
+  .mob-menu{padding:100px 20px 40px;}
+  .mob-link{font-size:clamp(2rem,12vw,3rem);}
+}
 </style>
 </head>
 <body>
@@ -2245,7 +2318,7 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
 
   </div>
   <div class="ft-bottom">
-    <span class="ft-copy">© 2025 Loïc Lastapis — Tous droits réservés</span>
+    <span class="ft-copy">© 2026 Loïc Lastapis — Tous droits réservés</span>
     <span class="ft-made">Lyon, France</span>
   </div>
 </footer>
