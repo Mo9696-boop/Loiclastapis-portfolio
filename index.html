@@ -1325,6 +1325,21 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
 .exp-strip::-webkit-scrollbar{display:none;}
 .exp-strip.is-dragging{cursor:grabbing;}
 
+@media(max-width:900px){
+  .exp-strip{
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    cursor:default;
+    padding:24px 20px;
+  }
+  .exp-card{
+    scroll-snap-align:center;
+    transform:none !important;
+    opacity:1 !important;
+    filter:none !important;
+  }
+}
+
 .exp-card{
   flex:0 0 clamp(260px,28vw,370px);
   height:520px;
@@ -2726,7 +2741,23 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
   btnPrev && btnPrev.addEventListener('click', () => goDir(-1));
   btnNext && btnNext.addEventListener('click', () => goDir( 1));
 
-  /* ─── Drag ───────────────────────────────────── */
+  /* ─── Touch vs Mouse ────────────────────────── */
+  const isTouch = window.matchMedia('(pointer:coarse)').matches;
+
+  if(isTouch){
+    // Native CSS scroll-snap handles scrolling. Just keep progress bar in sync.
+    Array.from(strip.children).forEach(card => {
+      card.style.cssText = 'transform:none;opacity:1;filter:none;transition:none;';
+    });
+    strip.addEventListener('scroll', () => {
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      const pct = maxScroll > 0 ? strip.scrollLeft / maxScroll : 0;
+      if(fillEl) fillEl.style.width = (pct * 100).toFixed(2) + '%';
+    }, { passive:true });
+    return; // no drag/3D logic on touch
+  }
+
+  /* ─── Mouse drag (desktop only) ─────────────── */
   strip.addEventListener('mousedown', e => {
     if(animReq) cancelAnimationFrame(animReq);
     isDown = true;
@@ -2738,45 +2769,15 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
     if(!isDown) return;
     isDown = false;
     strip.classList.remove('is-dragging');
-    // snap to nearest card by index
     const cardW  = strip.children[0].getBoundingClientRect().width + 14;
     const idx    = Math.max(0, Math.min(Math.round(strip.scrollLeft / cardW), TOTAL - 1));
-    const target = idx * cardW;
-    runAnim(strip.scrollLeft, target, SNAP_DUR);
+    runAnim(strip.scrollLeft, idx * cardW, SNAP_DUR);
   });
   strip.addEventListener('mousemove', e => {
     if(!isDown) return;
     e.preventDefault();
     strip.scrollLeft = savedScroll - (e.pageX - strip.offsetLeft - startX) * 1.3;
     styleCards();
-  });
-
-  /* ─── Touch ──────────────────────────────────── */
-  strip.addEventListener('touchstart', e => {
-    if(animReq) cancelAnimationFrame(animReq);
-    touchX = e.touches[0].clientX;
-    touchSavedScroll = strip.scrollLeft;
-    touchActive = true;
-  }, { passive:true });
-
-  strip.addEventListener('touchmove', e => {
-    if(!touchActive) return;
-    const dx = touchX - e.touches[0].clientX;
-    strip.scrollLeft = touchSavedScroll + dx;
-    styleCards();
-  }, { passive:true });
-
-  strip.addEventListener('touchend', e => {
-    if(!touchActive) return;
-    touchActive = false;
-    const dx = e.changedTouches[0].clientX - touchX;
-    const cardW  = strip.children[0].getBoundingClientRect().width + 14;
-    const curIdx = Math.round(strip.scrollLeft / cardW);
-    const newIdx = Math.max(0, Math.min(
-      dx < -45 ? curIdx + 1 : dx > 45 ? curIdx - 1 : curIdx,
-      TOTAL - 1
-    ));
-    runAnim(strip.scrollLeft, newIdx * cardW, SNAP_DUR);
   });
 
   /* ─── Live sync on native scroll ─────────────── */
