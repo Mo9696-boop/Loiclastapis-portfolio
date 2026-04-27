@@ -2631,7 +2631,7 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
   const SNAP_DUR = 440;  // ms for drag-release snap
   let   animReq  = null;
   let   isDown   = false, startX, savedScroll;
-  let   touchX   = 0;
+  let   touchX   = 0, touchSavedScroll = 0, touchActive = false;
 
   /* ─── Easing ─────────────────────────────────── */
   function easeOutExpo(t){ return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
@@ -2752,15 +2752,31 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
   });
 
   /* ─── Touch ──────────────────────────────────── */
-  strip.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive:true });
-  strip.addEventListener('touchend',   e => {
+  strip.addEventListener('touchstart', e => {
+    if(animReq) cancelAnimationFrame(animReq);
+    touchX = e.touches[0].clientX;
+    touchSavedScroll = strip.scrollLeft;
+    touchActive = true;
+  }, { passive:true });
+
+  strip.addEventListener('touchmove', e => {
+    if(!touchActive) return;
+    const dx = touchX - e.touches[0].clientX;
+    strip.scrollLeft = touchSavedScroll + dx;
+    styleCards();
+  }, { passive:true });
+
+  strip.addEventListener('touchend', e => {
+    if(!touchActive) return;
+    touchActive = false;
     const dx = e.changedTouches[0].clientX - touchX;
-    if(Math.abs(dx) > 45) goDir(dx < 0 ? 1 : -1);
-    else {
-      const cardW  = strip.children[0].getBoundingClientRect().width + 14;
-      const target = Math.round(strip.scrollLeft / cardW) * cardW;
-      runAnim(strip.scrollLeft, target, SNAP_DUR);
-    }
+    const cardW  = strip.children[0].getBoundingClientRect().width + 14;
+    const curIdx = Math.round(strip.scrollLeft / cardW);
+    const newIdx = Math.max(0, Math.min(
+      dx < -45 ? curIdx + 1 : dx > 45 ? curIdx - 1 : curIdx,
+      TOTAL - 1
+    ));
+    runAnim(strip.scrollLeft, newIdx * cardW, SNAP_DUR);
   });
 
   /* ─── Live sync on native scroll ─────────────── */
