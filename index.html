@@ -1628,6 +1628,14 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
     flex-shrink:0;
   }
   .cq-vignette{display:none;}
+  .cq-bg::after{
+    content:'';
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:60%;
+    background:linear-gradient(to bottom, transparent 0%, #18140E 100%);
+    pointer-events:none;
+  }
   .cq-inner{
     position:relative;
     background:var(--ink);
