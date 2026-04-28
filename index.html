@@ -473,10 +473,19 @@ section{padding:80px 0;}
   pointer-events:none;
 }
 .pr-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:rgba(201,168,76,.1);
+  display:flex;
+  flex-direction:row;
+  gap:1px;
+  background:rgba(201,168,76,.1);
   margin-top:70px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  cursor:grab;
+  user-select:none;
 }
+.pr-grid::-webkit-scrollbar{display:none;}
+.pr-grid.is-dragging{cursor:grabbing;}
 .pr-card{
   background:var(--ink);
   padding:44px 38px;
@@ -484,6 +493,7 @@ section{padding:80px 0;}
   display:flex;flex-direction:column;
   opacity:0;transform:translateY(18px);
   transition:opacity .7s,transform .7s;
+  flex:0 0 clamp(280px,30vw,400px);
 }
 .pr-card.visible{opacity:1;transform:translateY(0);}
 .pr-card:nth-child(2){transition-delay:.12s;}
@@ -875,7 +885,8 @@ footer{
   .ctr{padding:0 28px;}
   section{padding:80px 0;}
   .p-grid,.c-layout,.f-layout{grid-template-columns:1fr;gap:52px;}
-  .pr-grid{grid-template-columns:1fr;}
+  .pr-grid{gap:1px;}
+  .pr-card{flex:0 0 85vw;}
   .rec-card{flex:0 0 calc(100% - 0px);}
   .rec-viewport{margin:0 -28px;padding:0 28px 4px;}
   .rec-head{flex-direction:column;align-items:flex-start;gap:16px;}
@@ -2120,7 +2131,36 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
         <a href="https://www.businews.fr/TechnicoFlor-et-Mama-Shelter-proposent-une-parenthese-olfactive-et-gastronomique_a4314.html" target="_blank" class="pr-link">Lire l'article <span class="arr">→</span></a>
       </div>
 
+      <!-- Le Grand Pastis -->
+      <div class="pr-card reveal">
+        <div class="pr-source">
+          <div class="pr-source-ico">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          </div>
+          <div>
+            <div class="pr-source-name">Le Grand Pastis</div>
+            <div class="pr-type">Presse lifestyle · Article</div>
+          </div>
+        </div>
+        <p class="pr-title">Mondanités au <strong>Marriott</strong>, Marco version 4 mains et Tous au Restaurant</p>
+        <div class="pr-meta">Marriott Marseille</div>
+        <a href="https://www.le-grand-pastis.com/mondanites-marriott-marco-quatre-mains/" target="_blank" class="pr-link">Lire l'article <span class="arr">→</span></a>
+      </div>
+
+    </div><!-- /.pr-grid -->
+
+    <div class="exp-controls" style="margin-top:28px;">
+      <div class="exp-progress-wrap">
+        <div class="exp-progress-track">
+          <div class="exp-progress-fill" id="prProgress"></div>
+        </div>
+      </div>
+      <div class="exp-arrows">
+        <button class="exp-arr" id="prPrev" aria-label="Précédent">←</button>
+        <button class="exp-arr" id="prNext" aria-label="Suivant">→</button>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -2658,6 +2698,78 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
   ].forEach(sel => document.querySelectorAll(sel).forEach(el => {
     if(!el.hasAttribute('data-dir')) el.dataset.dir = 'r';
   }));
+})();
+
+/* ── PRESS STRIP DRAG ────────────────────────────────── */
+(function(){
+  const grid    = document.querySelector('.pr-grid');
+  const btnPrev = document.getElementById('prPrev');
+  const btnNext = document.getElementById('prNext');
+  const fillEl  = document.getElementById('prProgress');
+  if(!grid) return;
+
+  const SNAP_DUR = 400;
+  let animReq = null;
+
+  function easeOutExpo(t){ return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+  function runAnim(from, to, dur){
+    if(animReq) cancelAnimationFrame(animReq);
+    const t0 = performance.now();
+    (function tick(now){
+      const p = Math.min((now - t0) / dur, 1);
+      grid.scrollLeft = from + (to - from) * easeOutExpo(p);
+      syncUI();
+      if(p < 1) animReq = requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  function syncUI(){
+    const max = grid.scrollWidth - grid.clientWidth;
+    const pct = max > 0 ? grid.scrollLeft / max : 0;
+    if(fillEl) fillEl.style.width = (pct * 100).toFixed(2) + '%';
+    if(btnPrev) btnPrev.disabled = grid.scrollLeft < 8;
+    if(btnNext) btnNext.disabled = grid.scrollLeft >= max - 8;
+  }
+
+  function goDir(dir){
+    const cardW = grid.children[0].getBoundingClientRect().width + 1;
+    const cur   = Math.round(grid.scrollLeft / cardW);
+    const next  = Math.max(0, Math.min(cur + dir, grid.children.length - 1));
+    runAnim(grid.scrollLeft, next * cardW, SNAP_DUR);
+  }
+
+  btnPrev && btnPrev.addEventListener('click', () => goDir(-1));
+  btnNext && btnNext.addEventListener('click', () => goDir( 1));
+
+  grid.addEventListener('scroll', syncUI, { passive:true });
+
+  /* Touch — native swipe */
+  const isTouch = window.matchMedia('(pointer:coarse)').matches;
+  if(isTouch){ grid.style.cursor = 'default'; syncUI(); return; }
+
+  /* Mouse drag */
+  let isDown = false, startX, savedScroll;
+  grid.addEventListener('mousedown', e => {
+    if(animReq) cancelAnimationFrame(animReq);
+    isDown = true; grid.classList.add('is-dragging');
+    startX = e.pageX - grid.offsetLeft; savedScroll = grid.scrollLeft;
+  });
+  window.addEventListener('mouseup', () => {
+    if(!isDown) return;
+    isDown = false; grid.classList.remove('is-dragging');
+    const cardW = grid.children[0].getBoundingClientRect().width + 1;
+    const idx   = Math.round(grid.scrollLeft / cardW);
+    runAnim(grid.scrollLeft, idx * cardW, SNAP_DUR);
+  });
+  grid.addEventListener('mousemove', e => {
+    if(!isDown) return;
+    e.preventDefault();
+    grid.scrollLeft = savedScroll - (e.pageX - grid.offsetLeft - startX) * 1.2;
+    syncUI();
+  });
+
+  syncUI();
 })();
 
 /* ── HORIZONTAL EXPERIENCE STRIP ────────────────────── */
