@@ -1626,16 +1626,17 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
     min-height:220px;
     max-height:300px;
     flex-shrink:0;
+    filter:brightness(.55) saturate(.7);
   }
-  .cq-vignette{display:none;}
   .cq-bg::after{
     content:'';
     position:absolute;
     bottom:0;left:0;right:0;
-    height:60%;
+    height:55%;
     background:linear-gradient(to bottom, transparent 0%, #18140E 100%);
     pointer-events:none;
   }
+  .cq-vignette{display:none;}
   .cq-inner{
     position:relative;
     background:var(--ink);
@@ -1643,6 +1644,7 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
     text-align:left;
     width:100%;
     box-sizing:border-box;
+    margin-top:-2px;
   }
   .cq-open-mark{top:10px;left:18px;font-size:4rem;}
   .cq-text{font-size:1.1rem;line-height:1.7;padding-top:20px;}
