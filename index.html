@@ -1576,9 +1576,9 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
   .h-cta{margin-top:28px;padding:12px 28px;font-size:.5rem;letter-spacing:3px;}
   .h-eye{font-size:.44rem;letter-spacing:4px;margin-bottom:14px;}
 
-  /* Fix 1: profile frame - center the wrap so outer border is symmetric */
-  .p-photo-wrap{width:100%;display:flex;justify-content:center;}
-  .p-frame{width:220px;height:260px;}
+  /* Fix 1: profile frame - fixed width centered, not full screen */
+  .p-photo-wrap{width:260px;margin:0 auto 32px;}
+  .p-frame{width:260px;max-width:260px;height:310px;}
 
   /* Fix 2: drop-cap D - constrain float to first line only */
   .p-bio::first-letter{
@@ -1588,7 +1588,7 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
   .s-title{font-size:clamp(2.2rem,11vw,3.5rem);}
 
   /* Profile */
-  .p-frame{max-width:240px;height:260px;}
+  /* removed duplicate p-frame rule */
   .p-bio{font-size:.88rem;line-height:1.75;}
   .tags{gap:8px;}
   .tag{font-size:.4rem;padding:5px 12px;letter-spacing:2px;}
