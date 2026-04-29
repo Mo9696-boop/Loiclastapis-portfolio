@@ -2896,6 +2896,10 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
       const maxScroll = strip.scrollWidth - strip.clientWidth;
       const pct = maxScroll > 0 ? strip.scrollLeft / maxScroll : 0;
       if(fillEl) fillEl.style.width = (pct * 100).toFixed(2) + '%';
+      const cards = Array.from(strip.children);
+      const cardW = cards[0].getBoundingClientRect().width + 14;
+      const idx = Math.min(Math.round(strip.scrollLeft / cardW), TOTAL - 1);
+      if(countEl){ const sp = countEl.querySelector('span'); if(sp) sp.textContent = idx + 1; }
     }, { passive:true });
     return; // no drag/3D logic on touch
   }
