@@ -1313,48 +1313,50 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
   line-height:1.9;margin-top:16px;font-weight:300;
 }
 
-.exp-strip-outer{
-  margin:56px -80px 0;
-  padding:0 80px;
-  position:relative;
-  overflow:visible;
+.exp-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:56px;
 }
-.exp-strip{
-  display:flex;gap:14px;
-  overflow-x:scroll;
-  scrollbar-width:none;-ms-overflow-style:none;
-  padding:24px 60px 24px 0;
-  cursor:grab;user-select:none;
-}
-.exp-strip::-webkit-scrollbar{display:none;}
-.exp-strip.is-dragging{cursor:grabbing;}
-
 @media(max-width:900px){
-  .exp-strip{
+  .exp-grid{
+    display:flex;
+    flex-direction:row;
+    gap:12px;
+    overflow-x:scroll;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
-    cursor:default;
-    padding:24px 20px;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    padding-bottom:8px;
+    margin-top:36px;
   }
+  .exp-grid::-webkit-scrollbar{ display:none; }
   .exp-card{
+    flex:0 0 84vw;
     scroll-snap-align:center;
-    transform:none !important;
-    opacity:1 !important;
-    filter:none !important;
   }
+  .exp-card.feat{ flex:0 0 84vw; }
+  #experiences{ padding:80px 0 52px; }
 }
 
 .exp-card{
-  flex:0 0 clamp(260px,28vw,370px);
-  height:520px;
+  height:500px;
   border-radius:3px;overflow:hidden;
   position:relative;
-  transform-origin:center center;
-  scroll-snap-align:start;flex-shrink:0;
 }
 .exp-card.feat{
-  flex:0 0 clamp(320px,38vw,490px);
-  height:560px;
+  outline:1px solid transparent;
+  background-clip:padding-box;
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,.25),
+    0 0 18px 2px rgba(201,168,76,.12);
+  animation:featGlow 3s ease-in-out infinite;
+}
+@keyframes featGlow{
+  0%,100%{ box-shadow: 0 0 0 1px rgba(201,168,76,.2), 0 0 14px 2px rgba(201,168,76,.08); }
+  50%    { box-shadow: 0 0 0 1px rgba(212,184,94,.65), 0 0 28px 6px rgba(201,168,76,.22); }
 }
 .exp-card-img{
   position:absolute;inset:0;
@@ -1417,17 +1419,6 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
 }
 .exp-card-site-link .arr{ font-size:.55rem; }
 
-/* Make whole card feel clickable */
-.exp-card{ cursor:pointer; will-change:transform,opacity,filter; }
-
-/* Arrow kick animation */
-.exp-arr{ position:relative; overflow:hidden; }
-.exp-arr.kick{ animation:arrKick .28s cubic-bezier(.23,1,.32,1); }
-@keyframes arrKick{
-  0%  { transform:scale(1); }
-  40% { transform:scale(.78); background:var(--gold-b); color:var(--ink); border-color:var(--gold-b); }
-  100%{ transform:scale(1); }
-}
 .exp-card-stars{
   display:block;font-size:.62rem;color:var(--gold-b);
   letter-spacing:4px;margin-bottom:9px;opacity:.9;
@@ -1457,53 +1448,6 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
   color:rgba(245,243,239,.6);margin-top:5px;font-weight:500;
 }
 
-/* Controls */
-.exp-controls{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  margin-top:32px;padding:0 80px;
-  gap:24px;
-}
-/* ── Progress bar replaces the dots ── */
-.exp-progress-wrap{
-  flex:1;display:flex;flex-direction:column;gap:10px;
-}
-.exp-progress-track{
-  height:1px;background:rgba(201,168,76,.18);
-  position:relative;overflow:hidden;border-radius:1px;
-}
-.exp-progress-fill{
-  position:absolute;top:0;left:0;height:100%;
-  background:linear-gradient(to right,var(--gold),var(--gold-l));
-  width:0%;
-  transition:width .35s cubic-bezier(.23,1,.32,1);
-  box-shadow:0 0 8px rgba(201,168,76,.5);
-}
-.exp-counter{
-  font-size:.48rem;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(201,168,76,.65);font-weight:600;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:.85rem;letter-spacing:1px;
-}
-.exp-counter span{ color:var(--gold-b); }
-
-.exp-arrows{display:flex;gap:10px;}
-.exp-arr{
-  width:44px;height:44px;border:1px solid rgba(201,168,76,.2);
-  background:none;cursor:pointer;color:var(--gold-b);
-  font-size:.9rem;display:flex;align-items:center;justify-content:center;
-  transition:all .3s;
-}
-.exp-arr:hover{background:var(--gold-b);color:var(--ink);border-color:var(--gold-b);}
-.exp-arr:disabled{opacity:.2;pointer-events:none;}
-
-@media(max-width:900px){
-  .exp-strip-outer{margin:36px -28px 0;padding:0 28px;}
-  .exp-controls{padding:0 28px;}
-  .exp-card{flex:0 0 calc(84vw);height:460px;}
-  .exp-card.feat{flex:0 0 calc(90vw);height:490px;}
-  #experiences{padding:80px 0 52px;}
-}
 
 /* ══════════════════════════════════════════════════════
    CINEMATIC QUOTE SECTION
@@ -1829,17 +1773,11 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
         <h2 class="s-title">Expériences</h2>
       </div>
       <p class="s-intro">30+ ans à la tête des maisons qui comptent.</p>
-      <div class="exp-scroll-hint">
-        <span class="exp-scroll-hint-arrow">←</span>
-        <span class="exp-scroll-hint-text">Faire défiler pour explorer</span>
-        <span class="exp-scroll-hint-arrow">→</span>
-      </div>
     </div>
   </div>
 
-  <!-- HORIZONTAL CARD STRIP -->
-  <div class="exp-strip-outer">
-    <div class="exp-strip" id="expStrip">
+  <!-- EXPERIENCE GRID -->
+  <div class="exp-grid">
 
       <!-- Card 1: FEATURED - Current Role -->
       <div class="exp-card feat">
@@ -2038,22 +1976,7 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
         </div>
       </div>
 
-    </div><!-- /exp-strip -->
-  </div><!-- /exp-strip-outer -->
-
-  <!-- Controls -->
-  <div class="exp-controls">
-    <div class="exp-progress-wrap">
-      <div class="exp-progress-track">
-        <div class="exp-progress-fill" id="expProgress"></div>
-      </div>
-      <div class="exp-counter" id="expCounter"><span>1</span> / 11</div>
-    </div>
-    <div class="exp-arrows">
-      <button class="exp-arr" id="expPrev" aria-label="Précédent">←</button>
-      <button class="exp-arr" id="expNext" aria-label="Suivant">→</button>
-    </div>
-  </div>
+  </div><!-- /exp-grid -->
 
 </section>
 
@@ -2159,8 +2082,8 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
         </div>
       </div>
       <div class="exp-arrows">
-        <button class="exp-arr" id="prPrev" aria-label="Précédent">←</button>
-        <button class="exp-arr" id="prNext" aria-label="Suivant">→</button>
+        <button class="rec-arr" id="prPrev" aria-label="Précédent">←</button>
+        <button class="rec-arr" id="prNext" aria-label="Suivant">→</button>
       </div>
     </div>
 
@@ -2773,203 +2696,6 @@ document.querySelectorAll('.h-cta,.c-btn,.rec-arr').forEach(btn => {
   });
 
   syncUI();
-})();
-
-/* ── HORIZONTAL EXPERIENCE STRIP ────────────────────── */
-(function(){
-  const strip    = document.getElementById('expStrip');
-  const btnPrev  = document.getElementById('expPrev');
-  const btnNext  = document.getElementById('expNext');
-  const fillEl   = document.getElementById('expProgress');
-  const countEl  = document.getElementById('expCounter');
-  if(!strip) return;
-
-  const TOTAL    = strip.children.length;  // 11
-  const EASE_DUR = 640;  // ms for arrow scroll
-  const SNAP_DUR = 440;  // ms for drag-release snap
-  let   animReq  = null;
-  let   isDown   = false, startX, savedScroll;
-  let   touchX   = 0, touchSavedScroll = 0, touchActive = false;
-
-  /* ─── Easing ─────────────────────────────────── */
-  function easeOutExpo(t){ return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
-
-  function runAnim(from, to, dur){
-    if(animReq) cancelAnimationFrame(animReq);
-    const t0 = performance.now();
-    ;(function tick(now){
-      const p = Math.min((now - t0) / dur, 1);
-      strip.scrollLeft = from + (to - from) * easeOutExpo(p);
-      styleCards();
-      if(p < 1) animReq = requestAnimationFrame(tick);
-      else       syncUI();
-    })(t0);
-  }
-
-  /* ─── 3D card styling ────────────────────────── */
-  function styleCards(){
-    const cards  = Array.from(strip.children);
-    const cardW  = cards[0].getBoundingClientRect().width + 14;
-    const scroll = strip.scrollLeft;
-
-    cards.forEach((card, i) => {
-      const offset = i - scroll / cardW;
-      const abs    = Math.abs(offset);
-      const sign   = offset < 0 ? -1 : 1;
-
-      // Active card: full light. Inactive: progressively darker like unlit stage
-      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-
-      const sc     = abs < 0.5
-                       ? 1 + (0.5 - abs) * 0.10          // zoom to ~1.05
-                       : 1 - clamp((abs - 0.5) * 0.10, 0, 0.20);
-
-      const rotY   = clamp(abs, 0, 2.5) * sign * -18;
-
-      // Opacity: active=1, next card=0.45, beyond=0.25
-      const op     = clamp(1 - abs * 0.55, 0.18, 1.0);
-
-      // Brightness: active=1.15 (overexposed glow), falls off hard
-      const bright = abs < 0.5
-                       ? 1.15 - abs * 0.30               // bright spotlight on active
-                       : clamp(1.0 - (abs - 0.5) * 0.55, 0.12, 1.0); // lights out fast
-
-      // Saturation: active full colour, inactive desaturated
-      const sat    = clamp(1.0 - abs * 0.45, 0.20, 1.0);
-
-      card.style.transform  = `perspective(1100px) rotateY(${rotY}deg) scale(${sc.toFixed(3)})`;
-      card.style.opacity    = op.toFixed(3);
-      card.style.filter     = `brightness(${bright.toFixed(2)}) saturate(${sat.toFixed(2)})`;
-      card.style.zIndex     = Math.round(100 - abs * 10);
-      card.style.transition = abs < 0.15
-        ? 'transform .5s cubic-bezier(.23,1,.32,1), opacity .4s ease, filter .4s ease'
-        : 'none';
-    });
-  }
-
-  /* ─── UI sync (progress bar + counter + arrows) ─ */
-  function syncUI(){
-    styleCards();
-    const maxScroll = strip.scrollWidth - strip.clientWidth;
-    const pct       = maxScroll > 0 ? strip.scrollLeft / maxScroll : 0;
-    if(fillEl)  fillEl.style.width = (pct * 100).toFixed(2) + '%';
-
-    const cards = Array.from(strip.children);
-    const cardW = cards[0].getBoundingClientRect().width + 14;
-    const idx   = Math.min(Math.round(strip.scrollLeft / cardW), TOTAL - 1);
-    if(countEl){
-      const sp = countEl.querySelector('span');
-      if(sp) sp.textContent = idx + 1;
-    }
-
-    if(btnPrev) btnPrev.disabled = strip.scrollLeft < 8;
-    if(btnNext) btnNext.disabled = strip.scrollLeft >= maxScroll - 8;
-  }
-
-  /* ─── Arrow navigation ───────────────────────── */
-  function goDir(dir){
-    const cards = Array.from(strip.children);
-    const cardW = cards[0].getBoundingClientRect().width + 14;
-    const from  = strip.scrollLeft;
-    const curIdx = Math.round(from / cardW);
-    const newIdx = Math.max(0, Math.min(curIdx + dir, TOTAL - 1));
-    const to    = newIdx * cardW;
-    runAnim(from, to, EASE_DUR);
-    // kick the button
-    const btn = dir > 0 ? btnNext : btnPrev;
-    btn.classList.add('kick');
-    setTimeout(() => btn.classList.remove('kick'), 280);
-  }
-
-  btnPrev && btnPrev.addEventListener('click', () => goDir(-1));
-  btnNext && btnNext.addEventListener('click', () => goDir( 1));
-
-  /* ─── Touch vs Mouse ────────────────────────── */
-  const isTouch = window.matchMedia('(pointer:coarse)').matches;
-
-  if(isTouch){
-    // Native CSS scroll-snap handles scrolling. Just keep progress bar in sync.
-    Array.from(strip.children).forEach(card => {
-      card.style.cssText = 'transform:none;opacity:1;filter:none;transition:none;';
-    });
-    strip.addEventListener('scroll', () => {
-      const maxScroll = strip.scrollWidth - strip.clientWidth;
-      const pct = maxScroll > 0 ? strip.scrollLeft / maxScroll : 0;
-      if(fillEl) fillEl.style.width = (pct * 100).toFixed(2) + '%';
-      const cards = Array.from(strip.children);
-      const cardW = cards[0].getBoundingClientRect().width + 14;
-      const idx = Math.min(Math.round(strip.scrollLeft / cardW), TOTAL - 1);
-      if(countEl){ const sp = countEl.querySelector('span'); if(sp) sp.textContent = idx + 1; }
-    }, { passive:true });
-    return; // no drag/3D logic on touch
-  }
-
-  /* ─── Click-to-navigate (desktop) ───────────── */
-  let hasDragged = false;
-
-  Array.from(strip.children).forEach((card, i) => {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => {
-      if(hasDragged) return;
-      const cardW  = card.getBoundingClientRect().width + 14;
-      const curIdx = Math.round(strip.scrollLeft / cardW);
-      if(i === curIdx) return;
-      runAnim(strip.scrollLeft, i * cardW, EASE_DUR);
-    });
-  });
-
-  /* ─── Mouse drag (desktop fallback) ─────────── */
-  strip.addEventListener('mousedown', e => {
-    if(animReq) cancelAnimationFrame(animReq);
-    isDown = true; hasDragged = false;
-    strip.classList.add('is-dragging');
-    startX      = e.pageX - strip.offsetLeft;
-    savedScroll = strip.scrollLeft;
-  });
-  window.addEventListener('mouseup', () => {
-    if(!isDown) return;
-    isDown = false;
-    strip.classList.remove('is-dragging');
-    const cardW  = strip.children[0].getBoundingClientRect().width + 14;
-    const idx    = Math.max(0, Math.min(Math.round(strip.scrollLeft / cardW), TOTAL - 1));
-    runAnim(strip.scrollLeft, idx * cardW, SNAP_DUR);
-  });
-  strip.addEventListener('mousemove', e => {
-    if(!isDown) return;
-    e.preventDefault();
-    const moved = Math.abs(e.pageX - strip.offsetLeft - startX);
-    if(moved > 5) hasDragged = true;
-    strip.scrollLeft = savedScroll - (e.pageX - strip.offsetLeft - startX) * 1.3;
-    styleCards();
-  });
-
-  /* ─── Live sync on native scroll ─────────────── */
-  strip.addEventListener('scroll', () => {
-    syncUI();
-    // Hide scroll hint once user starts exploring
-    const hint = document.querySelector('.exp-scroll-hint');
-    if(hint && strip.scrollLeft > 30){
-      hint.style.transition = 'opacity .6s ease';
-      hint.style.opacity = '0';
-      hint.style.pointerEvents = 'none';
-    }
-  }, { passive:true });
-
-  /* ─── Init ───────────────────────────────────── */
-  syncUI();
-
-  /* Cinematic section BG parallax */
-  const cqBg = document.getElementById('cqBg');
-  if(cqBg){
-    window.addEventListener('scroll', () => {
-      const section = document.getElementById('cin-quote');
-      if(!section) return;
-      const rect = section.getBoundingClientRect();
-      if(rect.bottom < 0 || rect.top > window.innerHeight) return;
-      const progress = rect.top / window.innerHeight;
-      cqBg.style.transform = `scale(1.06) translateY(${progress * -50}px)`;
-    }, { passive: true });
-  }
 })();
 
 /* ── CUSTOM CURSOR ──────────────────────────────────── */
