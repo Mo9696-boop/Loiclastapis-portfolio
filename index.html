@@ -905,6 +905,7 @@ footer{
   .rec-viewport{margin:0 -28px;padding:0 28px 4px;}
   .rec-head{flex-direction:column;align-items:flex-start;gap:16px;}
   .rec-arrows{display:none;}
+  .exp-controls{display:none !important;}
   .p-frame{width:100%;max-width:280px;height:300px;}
   .st-grid{grid-template-columns:1fr 1fr;}
   .st-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.1);padding:32px 28px;}
@@ -1122,6 +1123,28 @@ footer{
   opacity:.0;
   animation:expHintFade .8s 1.2s ease forwards;
 }
+
+/* Mobile swipe hint — shared style for rec + exp sections */
+.swipe-hint{
+  display:none;
+}
+@media(max-width:900px){
+  .swipe-hint{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    margin-top:20px;
+    opacity:1;
+  }
+}
+.swipe-hint-text{
+  font-size:.42rem;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(201,168,76,.5);
+  font-family:'Raleway',sans-serif;font-weight:500;
+}
+.swipe-hint-arrow{
+  color:rgba(201,168,76,.4);font-size:.8rem;
+  animation:expArrowPulse 1.6s ease-in-out infinite;
+}
+.swipe-hint-arrow:last-child{ animation-delay:.4s; }
 @keyframes expHintFade{ to{ opacity:1; } }
 .exp-scroll-hint-text{
   font-size:.44rem;letter-spacing:5px;text-transform:uppercase;
@@ -2083,6 +2106,11 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
         <button class="rec-arr" id="expNext" aria-label="Suivant">&#8594;</button>
       </div>
     </div>
+    <div class="swipe-hint">
+      <span class="swipe-hint-arrow">&#8592;</span>
+      <span class="swipe-hint-text">Glisser pour voir plus</span>
+      <span class="swipe-hint-arrow">&#8594;</span>
+    </div>
   </div>
 
 </section>
@@ -2194,6 +2222,12 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
       </div>
     </div>
 
+    <div class="swipe-hint">
+      <span class="swipe-hint-arrow">&#8592;</span>
+      <span class="swipe-hint-text">Glisser pour voir plus</span>
+      <span class="swipe-hint-arrow">&#8594;</span>
+    </div>
+
   </div>
 </section>
 
@@ -2274,6 +2308,12 @@ nav .nav-links a.active-sec::after{ width:100% !important; }
     <div class="rec-dots" id="recDots">
       <button class="rec-dot active" data-i="0"></button>
       <button class="rec-dot" data-i="1"></button>
+    </div>
+
+    <div class="swipe-hint">
+      <span class="swipe-hint-arrow">&#8592;</span>
+      <span class="swipe-hint-text">Glisser pour voir plus</span>
+      <span class="swipe-hint-arrow">&#8594;</span>
     </div>
 
   </div>
